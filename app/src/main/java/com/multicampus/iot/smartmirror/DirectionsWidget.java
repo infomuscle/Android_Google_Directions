@@ -7,9 +7,6 @@ import android.widget.RemoteViews;
 
 import java.util.concurrent.ExecutionException;
 
-/**
- * Implementation of App Widget functionality.
- */
 public class DirectionsWidget extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
@@ -50,4 +47,3 @@ public class DirectionsWidget extends AppWidgetProvider {
         // Enter relevant functionality for when the last widget is disabled
     }
 }
-
