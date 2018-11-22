@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#09C"
-    android:padding="@dimen/widget_margin">
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/appwidget_text"
@@ -15,7 +15,7 @@
         android:contentDescription="@string/appwidget_text"
         android:text="@string/appwidget_text"
         android:textColor="#ffffff"
-        android:textSize="24sp"
+        android:textSize="12sp"
         android:textStyle="bold|italic" />
 
 </RelativeLayout>
