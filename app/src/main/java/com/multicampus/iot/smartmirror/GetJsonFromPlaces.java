@@ -10,21 +10,27 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class Task extends AsyncTask<String, Void, String> {
+public class GetJsonFromPlaces extends AsyncTask<String, Void, String> {
 
-    String clientKey = "#########################";;
     private String str, receiveMsg;
-    private final String ID = "########";
+    String API_KEY = "AIzaSyBNLuJvvEaKPepCbLuXU4cX9wWyTGju4lM";
+    String url_Body = "https://maps.googleapis.com/maps/api/geocode/json";
+    String url_Address = "?address=";
+    String url_Key = "&key=";
+    String url_Lang = "&language=ko";
+    String address_input;
+    String address;
 
     @Override
     protected String doInBackground(String... params) {
         URL url = null;
         try {
-//            url = new URL("https://maps.googleapis.com/maps/api/directions/json?origin=Toronto&destination=Montreal&key=AIzaSyBNLuJvvEaKPepCbLuXU4cX9wWyTGju4lM");
-            url = new URL("https://maps.googleapis.com/maps/api/directions/json?origin=place_id:ChIJFXO4zdSifDURFGFcAKIgK1s&destination=place_id:ChIJsaECEwqlfDURVEJQ6Agz7qc&mode=transit&language=ko&key=AIzaSyBNLuJvvEaKPepCbLuXU4cX9wWyTGju4lM");
+            address = address_input.replace(" ", "+");
+
+            url = new URL(url_Body + url_Address + address + url_Lang + url_Key + API_KEY);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
-            conn.setRequestProperty("x-waple-authorization", clientKey);
+            conn.setRequestProperty("x-waple-authorization", API_KEY);
 
             if (conn.getResponseCode() == conn.HTTP_OK) {
                 InputStreamReader tmp = new InputStreamReader(conn.getInputStream(), "UTF-8");

@@ -33,6 +33,8 @@ public class JsonParser {
     String step_Arrival_Time = null;        // 각 스텝별 도착 시간
     String step_Line_Number = null;         // 버스 번호, 지하철 호선
 
+    String place_id = null;
+
     // 총 스텝의 개수를 반환하는 메소드
     public int stepLengthChecker(String jsonString){
         try {
@@ -115,5 +117,15 @@ public class JsonParser {
         }
 
         return result;
+    }
+
+    public String getPlaceID(String jsonString) {
+        try {
+            JSONObject results = new JSONObject(jsonString).getJSONArray("results").getJSONObject(0);
+            place_id = results.optString("place_id");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return place_id;
     }
 }

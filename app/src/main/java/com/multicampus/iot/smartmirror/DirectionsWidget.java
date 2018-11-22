@@ -12,7 +12,7 @@ public class DirectionsWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
         try{
-            String resultText = new Task().execute().get();
+            String resultText = new GetJsonFromDirections().execute().get();
             String overview = new JsonParser().totalPrinter(resultText);
 
             CharSequence widgetText = context.getString(R.string.appwidget_text);
