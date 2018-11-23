@@ -12,33 +12,33 @@ public class JsonParser {
     int step_Length = 0;
 
     // JSON 데이터에서 필요한 자료만을 찾아 가공된 정보(각 스텝) 저장
-    String result = null;
-    String message = null;
+    String result;
+    String message;
 
-    String start_Address = null;            // 최초 출발지
-    String end_Address = null;              // 최종 도착지
-    String total_Distance = null;           // 총 거리
-    String total_Duration = null;           // 총 소요 시간
-    String total_Departure_Time = null;     // 출발 시간
-    String total_Arrival_Time = null;       // 도착 시간
+    String start_Address;            // 최초 출발지
+    String end_Address;              // 최종 도착지
+    String total_Distance;           // 총 거리
+    String total_Duration;           // 총 소요 시간
+    String total_Departure_Time;     // 출발 시간
+    String total_Arrival_Time;       // 도착 시간
 
-    String step_Travel_Mode = null;         // 이동 수단(도보 = WALKING, 대중교통 = TRANSIT)
+    String step_Travel_Mode;         // 이동 수단(도보 = WALKING, 대중교통 = TRANSIT)
 
-    String step_Distance = null;            // 각 스텝별 거리
-    String step_Duration = null;            // 각 스텝별 소요 시간
-    String step_Html_Instruction = null;    // 각 스텝별 이동 방법
-    String step_Departure_Stop = null;      // 각 스텝별 출발지
-    String step_Departure_Time = null;      // 각 스텝별 출발 시간
-    String step_Arrival_Stop = null;        // 각 스텝별 도착지
-    String step_Arrival_Time = null;        // 각 스텝별 도착 시간
-    String step_Line_Number = null;         // 버스 번호, 지하철 호선
+    String step_Distance;            // 각 스텝별 거리
+    String step_Duration;            // 각 스텝별 소요 시간
+    String step_Html_Instruction;    // 각 스텝별 이동 방법
+    String step_Departure_Stop;      // 각 스텝별 출발지
+    String step_Departure_Time;      // 각 스텝별 출발 시간
+    String step_Arrival_Stop;        // 각 스텝별 도착지
+    String step_Arrival_Time;        // 각 스텝별 도착 시간
+    String step_Line_Number;         // 버스 번호, 지하철 호선
 
-    String place_id = null;
+    String place_id;
 
     // 총 스텝의 개수를 반환하는 메소드
-    public int stepLengthChecker(String jsonString){
+    public int stepLengthChecker(String json_String){
         try {
-            JSONObject routes = new JSONObject(jsonString).getJSONArray("routes").getJSONObject(0);
+            JSONObject routes = new JSONObject(json_String).getJSONArray("routes").getJSONObject(0);
             JSONObject legs = routes.getJSONArray("legs").getJSONObject(0);
             JSONArray steps = legs.getJSONArray("steps");
             step_Length = steps.length();
@@ -49,11 +49,13 @@ public class JsonParser {
     }
 
     // 총 정보를 요약 가공하여 반환하는 메소드(최초 출발지, 최종 도착지 등, 총 거리, 총 소요시간 등)
-    public String totalPrinter(String jsonString){
+    public String totalPrinter(String json_String){
         try{
-            JSONObject routes = new JSONObject(jsonString).getJSONArray("routes").getJSONObject(0);
+            // JSON 중 필요 데이터에 접근하기 위한 JSON Object 변수 지정
+            JSONObject routes = new JSONObject(json_String).getJSONArray("routes").getJSONObject(0);
             JSONObject legs = routes.getJSONArray("legs").getJSONObject(0);
 
+            // 필요 정보 취합
             start_Address = legs.optString("start_address");
             end_Address = legs.optString("end_address");
             total_Distance = legs.getJSONObject("distance").optString("text");
@@ -72,18 +74,11 @@ public class JsonParser {
 
     // 각 스텝별 정보를 요약 가공하여 반환하는 메소드(스텝별 출발지, 스텝별 도착지 등)
     // MainActivity에서 반복문을 이용해 전체 스텝의 idx번째에 접근
-    public String stepPrinter(String jsonString, int idx) {
+    public String stepPrinter(String json_String, int idx) {
         try {
             // 총 경로의 정보에 접근
-            JSONObject routes = new JSONObject(jsonString).getJSONArray("routes").getJSONObject(0);
+            JSONObject routes = new JSONObject(json_String).getJSONArray("routes").getJSONObject(0);
             JSONObject legs = routes.getJSONArray("legs").getJSONObject(0);
-
-            start_Address = legs.optString("start_address");
-            end_Address = legs.optString("end_address");
-            total_Distance = legs.getJSONObject("distance").optString("text");
-            total_Duration = legs.getJSONObject("duration").optString("text");
-            total_Departure_Time = legs.getJSONObject("departure_time").optString("text");
-            total_Arrival_Time = legs.getJSONObject("arrival_time").optString("text");
 
             // 스텝별 경로의 정보에 접근
             JSONArray steps = legs.getJSONArray("steps");
@@ -120,9 +115,10 @@ public class JsonParser {
         return result;
     }
 
-    public String getPlaceID(String jsonString) {
+    // place_id를 반환하는 메소드
+    public String getPlaceId(String json_String) {
         try {
-            JSONObject results = new JSONObject(jsonString).getJSONArray("results").getJSONObject(0);
+            JSONObject results = new JSONObject(json_String).getJSONArray("results").getJSONObject(0);
             place_id = results.optString("place_id");
         } catch (JSONException e) {
             e.printStackTrace();
