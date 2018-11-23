@@ -11,7 +11,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class GetJsonFromPlaces extends AsyncTask<String, Void, String> {
-
     private String str, receiveMsg;
     String API_KEY = "AIzaSyBNLuJvvEaKPepCbLuXU4cX9wWyTGju4lM";
     String url_Body = "https://maps.googleapis.com/maps/api/geocode/json";
@@ -25,6 +24,7 @@ public class GetJsonFromPlaces extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... params) {
         URL url = null;
         try {
+            address_input = params[0];
             address = address_input.replace(" ", "+");
 
             url = new URL(url_Body + url_Address + address + url_Lang + url_Key + API_KEY);

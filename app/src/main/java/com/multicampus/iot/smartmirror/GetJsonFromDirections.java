@@ -16,21 +16,23 @@ public class GetJsonFromDirections extends AsyncTask<String, Void, String> {
     String url_Body = "https://maps.googleapis.com/maps/api/directions/json";
     String url_Origin = "?origin=";
     String url_Destin = "&destination=";
+    String url_Place_ID = "place_id:";
     String url_Key = "&key=";
     String url_Mode = "&mode=transit";
     String url_Lang = "&language=ko";
-
-    String origin = "ChIJFXO4zdSifDURFGFcAKIgK1s";
-    String destin = "ChIJsaECEwqlfDURVEJQ6Agz7qc";
-
-    String origin_ID = "place_id:";
-    String destin_ID = "place_id:";
-
+//    String origin_ID = "ChIJFXO4zdSifDURFGFcAKIgK1s";     // 성균관대
+//    String destin_ID = "ChIJsaECEwqlfDURVEJQ6Agz7qc";     // 잠실역
+//    String destin_ID = "ChIJpeKhoOiffDUR58XwBLzu4qE";       // 서울대
+//    String origin_ID = "ChIJF0OnPOOifDUR58l2u5fFViM";       // 충무로역
+    String origin_ID;
+    String destin_ID;
     @Override
     protected String doInBackground(String... params) {
         URL url = null;
         try {
-            url = new URL(url_Body + url_Origin + origin_ID + origin + url_Destin + destin_ID + destin + url_Mode + url_Lang + url_Key + API_KEY);
+            origin_ID = params[0];
+            destin_ID = params[1];
+            url = new URL(url_Body + url_Origin + url_Place_ID + origin_ID + url_Destin + url_Place_ID + destin_ID + url_Mode + url_Lang + url_Key + API_KEY);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
             conn.setRequestProperty("x-waple-authorization", API_KEY);
