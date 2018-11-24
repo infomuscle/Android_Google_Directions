@@ -10,11 +10,13 @@
     <EditText
         android:id="@+id/edittext_Origin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:hint="출발지" />
     <EditText
         android:id="@+id/edittext_Destination"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:hint="도착지" />
 
     <Button
         android:id="@+id/button_Get_Direction"
