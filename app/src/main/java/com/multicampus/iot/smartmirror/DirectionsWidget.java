@@ -5,28 +5,21 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.widget.RemoteViews;
 
-import java.util.concurrent.ExecutionException;
-
+/**
+ * Implementation of App Widget functionality.
+ */
 public class DirectionsWidget extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
-        try{
-            String resultText = new GetJsonFromDirections().execute().get();
-            String overview = new JsonParser().totalPrinter(resultText);
 
-            CharSequence widgetText = context.getString(R.string.appwidget_text);
-            // Construct the RemoteViews object
-            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.directions_widget);
-//        views.setTextViewText(R.id.appwidget_text, widgetText);
-            views.setTextViewText(R.id.appwidget_text, overview);
-            // Instruct the widget manager to update the widget
-            appWidgetManager.updateAppWidget(appWidgetId, views);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+        CharSequence widgetText = context.getString(R.string.appwidget_text);
+        // Construct the RemoteViews object
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.directions_widget);
+        views.setTextViewText(R.id.appwidget_text, widgetText);
+
+        // Instruct the widget manager to update the widget
+        appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
     @Override
@@ -47,3 +40,4 @@ public class DirectionsWidget extends AppWidgetProvider {
         // Enter relevant functionality for when the last widget is disabled
     }
 }
+
