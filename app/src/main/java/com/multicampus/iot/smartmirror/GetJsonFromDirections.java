@@ -17,26 +17,26 @@ public class GetJsonFromDirections extends AsyncTask<String, Void, String> {
     String api_Key = "AIzaSyBNLuJvvEaKPepCbLuXU4cX9wWyTGju4lM";
     String url_Body = "https://maps.googleapis.com/maps/api/directions/json";
     String url_Origin = "?origin=";
-    String url_Destin = "&destination=";
-    String url_Place_ID = "place_id:";
+    String url_Destination = "&destination=";
+    String url_Place_Id = "place_id:";
     String url_Key = "&key=";
     String url_Mode = "&mode=transit";
     String url_Lang = "&language=ko";
 
     // Places API에 보낼 url 요소 중 사용자 입력 요소
-    String origin_ID;                                       // 출발지의 place_id
-    String destin_ID;                                       // 도착지의 place_id
+    String origin_Id;                                       // 출발지의 place_id
+    String destination_Id;                                  // 도착지의 place_id
     
     @Override
     protected String doInBackground(String... params) {
         URL url;
         try {
             // execute() 메소드 안에 순서대로 인자를 대입해서 사용
-            origin_ID = params[0];
-            destin_ID = params[1];
+            origin_Id = params[0];
+            destination_Id = params[1];
 
             // url 생성
-            url = new URL(url_Body + url_Origin + url_Place_ID + origin_ID + url_Destin + url_Place_ID + destin_ID + url_Mode + url_Lang + url_Key + api_Key);
+            url = new URL(url_Body + url_Origin + url_Place_Id + origin_Id + url_Destination + url_Place_Id + destination_Id + url_Mode + url_Lang + url_Key + api_Key);
 
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
