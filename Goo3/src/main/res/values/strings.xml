@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ServerSensor_IOT</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="widget_Directions_Overview1">Add widget</string>
+    <string name="widget_Directions_Overview2">Add widget</string>
+    <string name="add_widget">Add widget</string>
+</resources>
