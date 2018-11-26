@@ -1,4 +1,4 @@
-package com.multicampus.iot.smartmirror;
+package com.example.serversensor_iot;
 
 import org.json.JSONArray;
 import org.json.JSONException;

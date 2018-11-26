@@ -1,4 +1,4 @@
-package com.multicampus.iot.smartmirror;
+package com.example.serversensor_iot;
 
 import android.os.AsyncTask;
 import android.util.Log;

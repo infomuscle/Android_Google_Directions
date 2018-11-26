@@ -1,9 +1,13 @@
-package com.multicampus.iot.smartmirror;
+package com.example.serversensor_iot;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.widget.RemoteViews;
+
+import com.example.serversensor_iot.GetJsonFromDirections;
+import com.example.serversensor_iot.GetJsonFromPlaces;
+import com.example.serversensor_iot.JsonParser;
 
 import java.text.MessageFormat;
 
@@ -25,11 +29,11 @@ public class DirectionsWidget extends AppWidgetProvider {
     String message;                         // MessageFormat 기본값
 
     protected void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
+                                   int appWidgetId) {
 //        CharSequence origin = "역삼 멀티캠퍼스";
 //        CharSequence destination = "경복궁";
-        origin = "충무로역";
-        destination = "복정역";
+        origin = "역삼 멀티캠퍼스";
+        destination = "잠실 롯데월드";
 
         // Directions API와 Places API에서 JSON 데이터를 불러옴
         try {
