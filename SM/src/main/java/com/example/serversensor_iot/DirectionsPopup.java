@@ -12,6 +12,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import java.text.MessageFormat;
 
@@ -44,6 +45,7 @@ public class DirectionsPopup  extends Activity {
     String overview2;                       // 전체 경로 요약 정보 중 JsonParser 처리 부분 저장
     String message;                         // MessageFormat 기본값
     String[] steps;
+    String stepview_text;
 
     Context c;
 
@@ -66,42 +68,50 @@ public class DirectionsPopup  extends Activity {
         button_Ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 각 변수에 EditText에서 받아온 출발지명, 목적지명 저장
-                origin = edittext_Origin_Popup.getText().toString();
-                destination = edittext_Destination_Popup.getText().toString();
+                try{
+                    // 각 변수에 EditText에서 받아온 출발지명, 목적지명 저장
+                    origin = edittext_Origin_Popup.getText().toString();
+                    destination = edittext_Destination_Popup.getText().toString();
 
-                // Directions API와 Places API에서 JSON 데이터를 불러옴
-                try {
-                    // EditText에서 받은 출발지명, 목적지명을 place_id로 반환받아 저장
-                    places_Json_Text_Origin = new GetJsonFromPlaces().execute(origin).get();
-                    places_Json_Text_Destination = new GetJsonFromPlaces().execute(destination).get();
-                    origin_Id = new JsonParser().getPlaceId(places_Json_Text_Origin);
-                    destination_Id = new JsonParser().getPlaceId(places_Json_Text_Destination);
+                    // Directions API와 Places API에서 JSON 데이터를 불러옴
+                    try {
+                        // EditText에서 받은 출발지명, 목적지명을 place_id로 반환받아 저장
+                        places_Json_Text_Origin = new GetJsonFromPlaces().execute(origin).get();
+                        places_Json_Text_Destination = new GetJsonFromPlaces().execute(destination).get();
+                        origin_Id = new JsonParser().getPlaceId(places_Json_Text_Origin);
+                        destination_Id = new JsonParser().getPlaceId(places_Json_Text_Destination);
 
-                    // 반환받은 place_id 값들의 경로 JSON 데이터를 String 형태로 받아옴
-                    directions_Json_Text = new GetJsonFromDirections().execute(origin_Id, destination_Id).get();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                        // 반환받은 place_id 값들의 경로 JSON 데이터를 String 형태로 받아옴
+                        directions_Json_Text = new GetJsonFromDirections().execute(origin_Id, destination_Id).get();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
-                // 전체 경로 요약 정보를 표시함
-                message = "{0}부터 {1}까지\n";
-                overview1 = MessageFormat.format(message, origin, destination);             // EditText에서 받은 지명 포매팅
-                overview2 = new JsonParser().totalPrinter(directions_Json_Text);            // 전체 경로 요약 정보를 불러옴
-                overviewPrinter(c, awm, overview1, overview2);
+                    // 전체 경로 요약 정보를 표시함
+                    message = "{0}부터 {1}까지";
+                    overview1 = MessageFormat.format(message, origin, destination);             // EditText에서 받은 지명 포매팅
+                    overview2 = new JsonParser().totalPrinter(directions_Json_Text);            // 전체 경로 요약 정보를 불러옴
 
-                // 스텝별 경로를 표시함
-                step_Length = new JsonParser().stepLengthChecker(directions_Json_Text);   // 목적지까지 경로의 스텝 개수를 불러옴
-                steps = new String[step_Length];                               // 각 스텝의 정보를 String 형태로 저장
+                    // 스텝별 경로를 표시함
+                    step_Length = new JsonParser().stepLengthChecker(directions_Json_Text);   // 목적지까지 경로의 스텝 개수를 불러옴
+                    steps = new String[step_Length];                               // 각 스텝의 정보를 String 형태로 저장
+                    stepview_text = "";
+                    // i번째 스텝의 정보를 배열의 i번째에 대입함
+                    for (int i = 0; i < step_Length; i++) {
+                        steps[i] = new JsonParser().stepPrinter(directions_Json_Text, i);
+                        stepview_text += steps[i] + "\n";
+                    }
 
-                // i번째 스텝의 정보를 배열의 i번째에 대입함
-                for (int i = 0; i < step_Length; i++) {
-                    steps[i] = new JsonParser().stepPrinter(directions_Json_Text, i);
-                }
-
+                    overviewPrinter(c, awm, overview1, overview2, stepview_text);
 //                stepviewPrinter(c, awm, steps);
 
-                finish();
+                    finish();
+                } catch (Exception e){
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "올바른 장소명을 입력하세요", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+
             }
         });
 
@@ -128,7 +138,7 @@ public class DirectionsPopup  extends Activity {
         return;
     }
 
-    public void overviewPrinter(Context context, AppWidgetManager appWidgetManager, String ov1, String ov2)
+    public void overviewPrinter(Context context, AppWidgetManager appWidgetManager, String ov1, String ov2, String sv)
     {
         this.awm = appWidgetManager;
         thisWidget = new ComponentName(context, DirectionsWidget.class);
@@ -136,6 +146,7 @@ public class DirectionsPopup  extends Activity {
 
         remoteViews.setTextViewText(R.id.widget_Directions_Overview1, ov1);
         remoteViews.setTextViewText(R.id.widget_Directions_Overview2, ov2);
+        remoteViews.setTextViewText(R.id.widget_Directions_Stepview, sv);
         appWidgetManager.updateAppWidget(thisWidget, remoteViews);
     }
 }

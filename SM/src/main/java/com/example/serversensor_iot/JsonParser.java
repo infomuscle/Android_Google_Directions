@@ -63,7 +63,7 @@ public class JsonParser {
             total_Departure_Time = legs.getJSONObject("departure_time").optString("text");
             total_Arrival_Time = legs.getJSONObject("arrival_time").optString("text");
 
-            message = "{0}, {1} 소요\n{2} 출발 시 {3} 도착 예정\n\n";
+            message = "{0}, {1} 소요\n{2} 출발 시 {3} 도착 예정";
             result = MessageFormat.format(message,
                     total_Distance, total_Duration, total_Departure_Time, total_Arrival_Time);
         } catch (JSONException e){
