@@ -12,9 +12,6 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
-/**
- * Implementation of App Widget functionality.
- */
 public class SensorValueWidget extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,

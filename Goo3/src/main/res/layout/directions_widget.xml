@@ -1,10 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#09C"
+    android:background="@android:color/transparent"
     android:padding="@dimen/widget_margin"
     android:orientation="vertical"
-    android:id="@+id/widget_layout"
+    android:id="@+id/layout_Directions_Widget"
     >
 
     <TextView
@@ -14,12 +14,12 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_margin="3dp"
-        android:background="#09C"
+        android:background="@android:color/transparent"
         android:contentDescription="@string/widget_Directions_Overview1"
         android:text="@string/widget_Directions_Overview1"
         android:textColor="#ffffff"
         android:textSize="16sp"
-        android:textStyle="bold|italic" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/widget_Directions_Overview2"
@@ -28,12 +28,12 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_margin="3dp"
-        android:background="#09C"
+        android:background="@android:color/transparent"
         android:contentDescription="@string/widget_Directions_Overview2"
         android:text="@string/widget_Directions_Overview2"
         android:textColor="#ffffff"
         android:textSize="16sp"
-        android:textStyle="bold|italic" />
+        android:textStyle="bold" />
 
     <ListView
         android:id="@+id/widget_Stepview"
