@@ -88,8 +88,8 @@ public class DirectionsPopup  extends Activity {
                     }
 
                     // 전체 경로 요약 정보를 표시함
-                    message = "{0}부터 {1}까지";
-                    overview1 = MessageFormat.format(message, origin, destination);             // EditText에서 받은 지명 포매팅
+//                    message = "{0}부터 {1}까지";
+//                    overview1 = MessageFormat.format(message, origin, destination);             // EditText에서 받은 지명 포매팅
                     overview2 = new JsonParser().totalPrinter(directions_Json_Text);            // 전체 경로 요약 정보를 불러옴
 
                     // 스텝별 경로를 표시함
@@ -102,7 +102,9 @@ public class DirectionsPopup  extends Activity {
                         stepview_text += steps[i] + "\n";
                     }
 
-                    overviewPrinter(c, awm, overview1, overview2, stepview_text);
+//                    overviewPrinter(c, awm, overview1, overview2, stepview_text);
+                    overviewPrinter(c, awm, origin, destination, overview2, stepview_text);
+
 //                stepviewPrinter(c, awm, steps);
 
                     finish();
@@ -138,14 +140,18 @@ public class DirectionsPopup  extends Activity {
         return;
     }
 
-    public void overviewPrinter(Context context, AppWidgetManager appWidgetManager, String ov1, String ov2, String sv)
+    public void overviewPrinter(Context context, AppWidgetManager appWidgetManager, String ov1, String ov2, String time, String sv)
     {
         this.awm = appWidgetManager;
         thisWidget = new ComponentName(context, DirectionsWidget.class);
         remoteViews = new RemoteViews(context.getPackageName(), R.layout.directions_widget);
-
-        remoteViews.setTextViewText(R.id.widget_Directions_Overview1, ov1);
-        remoteViews.setTextViewText(R.id.widget_Directions_Overview2, ov2);
+        remoteViews.setTextViewText(R.id.widget_Origin, ov1);
+        remoteViews.setTextViewText(R.id.widget_Particle1, "에서 ");
+        remoteViews.setTextViewText(R.id.widget_Destination, ov2);
+        remoteViews.setTextViewText(R.id.widget_Particle2, "까지");
+        remoteViews.setTextViewText(R.id.widget_Time, time);
+//        remoteViews.setTextViewText(R.id.widget_Directions_Overview1, ov1);
+//        remoteViews.setTextViewText(R.id.widget_Directions_Overview2, ov2);
         remoteViews.setTextViewText(R.id.widget_Directions_Stepview, sv);
         appWidgetManager.updateAppWidget(thisWidget, remoteViews);
     }
