@@ -1,2 +1,2 @@
-include ':app', ':Goo4'
+include ':app', ':Goo4', ':SM'
 project(':Goo4').projectDir = new File('Goo3')

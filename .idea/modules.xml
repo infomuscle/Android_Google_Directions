@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Goo3/Goo4.iml" filepath="$PROJECT_DIR$/Goo3/Goo4.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SM/SM.iml" filepath="$PROJECT_DIR$/SM/SM.iml" />
       <module fileurl="file://$PROJECT_DIR$/SmartMirror.iml" filepath="$PROJECT_DIR$/SmartMirror.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

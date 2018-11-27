@@ -39,11 +39,6 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView textView_Humidity;
     private TextView textView_Temperature;
-
-//    private EditText editText_ORIGIN;
-//    private EditText editText_DESTIN;
-//    private Button button_INPUT;
-//    private TextView textView_TRANS;
     private WebView webView_VIDEO;
     private Button button_DOOROPEN;
     private Button button_REPORT;
@@ -136,14 +131,6 @@ public class MainActivity extends AppCompatActivity {
         serverSocketAcceptIOT = new ServerSocketAcceptIOT();
         serverSocketAcceptIOT.start();
 
-//        button_INPUT.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Accept_Trans accept_trans = new Accept_Trans(editText_ORIGIN.getText().toString(), editText_DESTIN.getText().toString());
-//                accept_trans.start();
-//            }
-//        });
-
         button_REPORT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -214,74 +201,9 @@ public class MainActivity extends AppCompatActivity {
 
     public Button getButtonREPORT() { return button_REPORT; }
 
-//    class Accept_Trans extends Thread {
-//
-//        Socket tr_client = null;
-//
-//
-//        PrintWriter out;
-//        BufferedReader in;
-//
-//        String originMsg;
-//        String destinMsg;
-//        String receiveMsg;
-//
-//        public Accept_Trans(String s, String s1) {
-//
-//            originMsg = s;
-//            destinMsg = s1;
-//        }
-//
-//        @Override
-//        public void run() {
-//            try {
-//                tr_client = new Socket();
-//                tr_client.connect(new InetSocketAddress("192.168.43.69", 9010), 3000);
-//
-//                System.out.println("결과 확인 : 1");
-//
-//                out = new PrintWriter(new OutputStreamWriter(tr_client.getOutputStream()), true);                                                                                                //전송한다.
-//                System.out.println("결과 확인 : 2");
-//                in = new BufferedReader(new InputStreamReader(tr_client.getInputStream(), "UTF-8"));
-//
-//                System.out.println("결과 확인 : " + originMsg + "," + destinMsg);
-//                out.write(originMsg + "," + destinMsg + ", send!");
-//                out.flush();
-//
-//                receiveMsg = in.readLine();
-//                receiveMsg = receiveMsg.replace(";", "\n");
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                textView_TRANS.setText(receiveMsg);
-//                            }
-//                        });
-//                    }
-//                }).start();
-//
-//            } catch (IOException e) {
-//                System.out.println("결과 확인 : 오류냤다");
-//                System.out.println("결과 확인 : " + e.toString());
-//            } catch (NullPointerException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-
     @Override
     protected void onDestroy() {
-//        try {
-////            in.close();
-////            out.close();
-////            socket.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
         super.onDestroy();
-
     }
 
     /********************* 보근 코드 *********************/
