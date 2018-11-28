@@ -35,6 +35,17 @@ public class JsonParser {
 
     String place_id;
 
+    // place_id를 반환하는 메소드
+    public String getPlaceId(String json_String) {
+        try {
+            JSONObject results = new JSONObject(json_String).getJSONArray("results").getJSONObject(0);
+            place_id = results.optString("place_id");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return place_id;
+    }
+
     // 총 스텝의 개수를 반환하는 메소드
     public int stepLengthChecker(String json_String){
         try {
@@ -48,7 +59,63 @@ public class JsonParser {
         return step_Length;
     }
 
-    // 총 정보를 요약 가공하여 반환하는 메소드(최초 출발지, 최종 도착지 등, 총 거리, 총 소요시간 등)
+    /****************************  앱 위젯에서 사용  ****************************/
+    public String getTotalDuration(String json_String){
+        try{
+            // JSON 중 필요 데이터에 접근하기 위한 JSON Object 변수 지정
+            JSONObject routes = new JSONObject(json_String).getJSONArray("routes").getJSONObject(0);
+            JSONObject legs = routes.getJSONArray("legs").getJSONObject(0);
+            // 필요 정보 취합
+            total_Duration = legs.getJSONObject("duration").optString("text");
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+        return total_Duration;
+    }
+
+    public String getTotalDistance(String json_String){
+        try{
+            // JSON 중 필요 데이터에 접근하기 위한 JSON Object 변수 지정
+            JSONObject routes = new JSONObject(json_String).getJSONArray("routes").getJSONObject(0);
+            JSONObject legs = routes.getJSONArray("legs").getJSONObject(0);
+            // 필요 정보 취합
+            total_Distance = legs.getJSONObject("distance").optString("text");
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+        return total_Distance;
+    }
+
+    public String getTotalDepartureTime(String json_String){
+        try{
+            // JSON 중 필요 데이터에 접근하기 위한 JSON Object 변수 지정
+            JSONObject routes = new JSONObject(json_String).getJSONArray("routes").getJSONObject(0);
+            JSONObject legs = routes.getJSONArray("legs").getJSONObject(0);
+            // 필요 정보 취합
+            total_Departure_Time = legs.getJSONObject("departure_time").optString("text");
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+        return total_Departure_Time;
+    }
+
+    public String getTotalArrivalTime(String json_String){
+        try{
+            // JSON 중 필요 데이터에 접근하기 위한 JSON Object 변수 지정
+            JSONObject routes = new JSONObject(json_String).getJSONArray("routes").getJSONObject(0);
+            JSONObject legs = routes.getJSONArray("legs").getJSONObject(0);
+            // 필요 정보 취합
+            total_Arrival_Time = legs.getJSONObject("arrival_time").optString("text");
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+        return total_Arrival_Time;
+    }
+    /****************************  앱 위젯에서 사용  ****************************/
+
+
+
+    /****************************  메인 액티비티에서 사용  ****************************/
     public String totalPrinter(String json_String){
         try{
             // JSON 중 필요 데이터에 접근하기 위한 JSON Object 변수 지정
@@ -63,9 +130,10 @@ public class JsonParser {
             total_Departure_Time = legs.getJSONObject("departure_time").optString("text");
             total_Arrival_Time = legs.getJSONObject("arrival_time").optString("text");
 
-            message = "{0}, {1} 소요\n{2} 출발 시 {3} 도착 예정";
-            result = MessageFormat.format(message,
-                    total_Distance, total_Duration, total_Departure_Time, total_Arrival_Time);
+//            message = "{0} 소요 ({1})\n{2} 출발 시 {3} 도착 예정";
+//            result = MessageFormat.format(message, total_Duration, total_Distance,  total_Departure_Time, total_Arrival_Time);
+            message = "{0} 소요 ({1})\n{2} 출발 시 {3} 도착 예정";
+            result = MessageFormat.format(message, total_Duration, total_Distance,  total_Departure_Time, total_Arrival_Time);
         } catch (JSONException e){
             e.printStackTrace();
         }
@@ -99,14 +167,14 @@ public class JsonParser {
                 step_Arrival_Stop = transit_details.getJSONObject("arrival_stop").optString("name");
                 step_Arrival_Time = transit_details.getJSONObject("arrival_time").optString("text");
 
-                message = "- {6} {7} 탑승, {8} 소요({9})\n  ({10}에서 {11} 승차, {12}에 {13} 하차)";
-                result = MessageFormat.format(message, start_Address, end_Address, total_Distance, total_Duration, total_Departure_Time, total_Arrival_Time, step_Html_Instruction, step_Line_Number, step_Duration, step_Distance, step_Departure_Stop, step_Departure_Time, step_Arrival_Stop, step_Arrival_Time);
+                message = "- {0} {1} 탑승, {2} 소요({3})\n  ({4}에서 {5} 승차, {6}에 {7} 하차)";
+                result = MessageFormat.format(message, step_Html_Instruction, step_Line_Number, step_Duration, step_Distance, step_Departure_Stop, step_Departure_Time, step_Arrival_Stop, step_Arrival_Time);
             }
 
             // 도보로 이동할 때
             else{
-                message = "- {6}, {7} 소요({8})";
-                result = MessageFormat.format(message, start_Address, end_Address, total_Distance, total_Duration, total_Departure_Time, total_Arrival_Time, step_Html_Instruction, step_Duration, step_Distance);
+                message = "- {0}, {1} 소요({2})";
+                result = MessageFormat.format(message, step_Html_Instruction, step_Duration, step_Distance);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -114,15 +182,5 @@ public class JsonParser {
 
         return result;
     }
-
-    // place_id를 반환하는 메소드
-    public String getPlaceId(String json_String) {
-        try {
-            JSONObject results = new JSONObject(json_String).getJSONArray("results").getJSONObject(0);
-            place_id = results.optString("place_id");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return place_id;
-    }
+    /****************************  메인 액티비티에서 사용  ****************************/
 }
