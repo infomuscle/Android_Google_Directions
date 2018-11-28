@@ -47,10 +47,15 @@ public class DirectionsPopup  extends Activity {
     String total_Distance_Format;                   // 전체 경로 거리 포매팅 변수
     String total_Departure_Time;                    // 전체 경로 출발 시간
     String total_Arrival_Time;                      // 전체 경로 도착 시간
+    String step_Transit;
+    String step_LineNumber;
+    String step_Departure_Stop;
+    String step_Departure_Time;
     int step_Length;                        // JSON 데이터 중 "steps" 키가 갖는 값의 길이 저장(목적지까지 경로의 스텝 개수)
     String message;                         // MessageFormat 기본값
     String[] steps;
     String stepview_Text;
+    String[] first_Line_Split;
 
     //기본값 설정
     @Override
@@ -99,6 +104,7 @@ public class DirectionsPopup  extends Activity {
                     total_Arrival_Time = new JsonParser().getTotalArrivalTime(directions_Json_Text);
                     message = " 소요 ({0})";
                     total_Distance_Format = MessageFormat.format(message, total_Distance);
+                    overviewPrinter(c, awm, origin, destination, total_Duration, total_Distance_Format, total_Departure_Time, total_Arrival_Time);
 
                     // 스텝별 경로를 표시함
                     step_Length = new JsonParser().stepLengthChecker(directions_Json_Text);   // 목적지까지 경로의 스텝 개수를 불러옴
@@ -107,12 +113,27 @@ public class DirectionsPopup  extends Activity {
                     // i번째 스텝의 정보를 배열의 i번째에 대입함
                     for (int i = 0; i < step_Length; i++) {
                         steps[i] = new JsonParser().stepPrinter(directions_Json_Text, i);
-                        stepview_Text += steps[i] + "\n";
+                        if (steps[i] != null) {
+                            if (stepview_Text.equals("")){
+                                step_Transit = new JsonParser().getStepTransit(directions_Json_Text, i);
+                                step_LineNumber = new JsonParser().getStepLineNumber(directions_Json_Text, i);
+                                if (step_Transit.equals("버스")) {
+                                    step_LineNumber += "번";
+                                }
+                                step_Departure_Stop = new JsonParser().getStepDepartureStop(directions_Json_Text, i);
+                                if (step_Transit.equals("지하철")){
+                                    step_Departure_Stop += "역";
+                                }
+                                step_Departure_Time = new JsonParser().getStepDepartureTime(directions_Json_Text, i);
+                                first_Line_Split = steps[i].split("\n");
+                                stepview_Text += first_Line_Split[1] + "\n";
+                            }
+                            else{
+                                stepview_Text += steps[i] + "\n";
+                            }
+                        }
                     }
-
-                    overviewPrinter(c, awm, origin, destination, total_Duration, total_Distance_Format, total_Departure_Time, total_Arrival_Time, stepview_Text);
-
-//                stepviewPrinter(c, awm, steps);
+                    stepviewPrinter(c, awm, step_Transit, step_LineNumber, step_Departure_Stop, step_Departure_Time, stepview_Text);
 
                     finish();
                 } catch (Exception e){
@@ -148,7 +169,7 @@ public class DirectionsPopup  extends Activity {
     }
 
     // TextView에 전체 경로를 표시하는 메소드 (현재는 스텝별 경로도 TextView로 표시)
-    public void overviewPrinter(Context ctxt, AppWidgetManager appWidgetManager, String ov1, String ov2, String drtn, String dstnce, String dptr, String arvl, String sv)
+    public void overviewPrinter(Context ctxt, AppWidgetManager appWidgetManager, String ov1, String ov2, String drtn, String dstnce, String dptr, String arvl)
     {
         this.awm = appWidgetManager;
         thisWidget = new ComponentName(ctxt, DirectionsWidget.class);
@@ -173,7 +194,26 @@ public class DirectionsPopup  extends Activity {
         remoteViews.setViewVisibility(R.id.widget_Overview3,View.VISIBLE);
 
         // Stepview
-        remoteViews.setTextViewText(R.id.widget_Directions_Stepview, sv);
         appWidgetManager.updateAppWidget(thisWidget, remoteViews);
+    }
+
+    public void stepviewPrinter(Context ctxt, AppWidgetManager appWidgetManager, String trnst, String lnnm, String dptrstp, String dptrtm, String othr){
+        this.awm = appWidgetManager;
+        thisWidget = new ComponentName(ctxt, DirectionsWidget.class);
+        remoteViews = new RemoteViews(ctxt.getPackageName(), R.layout.directions_widget);
+
+        remoteViews.setTextViewText(R.id.widget_Directions_Stepview_Transit, trnst);
+        remoteViews.setTextViewText(R.id.widget_Particle5, " ");
+        remoteViews.setTextViewText(R.id.widget_Directions_Stepview_LineNumber, lnnm);
+        remoteViews.setTextViewText(R.id.widget_Particle6, " ");
+        remoteViews.setTextViewText(R.id.widget_Directions_Stepview_Departure_Stop, dptrstp);
+        remoteViews.setTextViewText(R.id.widget_Particle7, "에 ");
+        remoteViews.setTextViewText(R.id.widget_Directions_Stepview_Departure_Time, dptrtm);
+        remoteViews.setTextViewText(R.id.widget_Particle8, " 도착");
+
+        remoteViews.setTextViewText(R.id.widget_Directions_Stepview_Others, othr);
+
+        appWidgetManager.updateAppWidget(thisWidget, remoteViews);
+
     }
 }
