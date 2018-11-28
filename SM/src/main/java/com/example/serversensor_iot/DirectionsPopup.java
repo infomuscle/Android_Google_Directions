@@ -55,7 +55,11 @@ public class DirectionsPopup  extends Activity {
     String message;                         // MessageFormat 기본값
     String[] steps;
     String stepview_Text;
+    int flag_First = 1;
     String[] first_Line_Split;
+    String step_Travel_Mode;
+    String step_Distance;
+    String step_Duration;
 
     //기본값 설정
     @Override
@@ -113,22 +117,27 @@ public class DirectionsPopup  extends Activity {
                     // i번째 스텝의 정보를 배열의 i번째에 대입함
                     for (int i = 0; i < step_Length; i++) {
                         steps[i] = new JsonParser().stepPrinter(directions_Json_Text, i);
-                        if (steps[i] != null) {
-                            if (stepview_Text.equals("")){
-                                step_Transit = new JsonParser().getStepTransit(directions_Json_Text, i);
-                                step_LineNumber = new JsonParser().getStepLineNumber(directions_Json_Text, i);
-                                if (step_Transit.equals("버스")) {
-                                    step_LineNumber += "번";
-                                }
-                                step_Departure_Stop = new JsonParser().getStepDepartureStop(directions_Json_Text, i);
-                                if (step_Transit.equals("지하철")){
-                                    step_Departure_Stop += "역";
-                                }
-                                step_Departure_Time = new JsonParser().getStepDepartureTime(directions_Json_Text, i);
-                                first_Line_Split = steps[i].split("\n");
-                                stepview_Text += first_Line_Split[1] + "\n";
+                        step_Travel_Mode = new JsonParser().getStepTravelMode(directions_Json_Text, i);
+                        if (step_Travel_Mode.equals("WALKING") == false && flag_First == 1){
+                            step_Transit = new JsonParser().getStepTransit(directions_Json_Text, i);
+                            step_LineNumber = new JsonParser().getStepLineNumber(directions_Json_Text, i);
+                            if (step_Transit.equals("버스")) {
+                                step_LineNumber += "번";
                             }
-                            else{
+                            step_Departure_Stop = new JsonParser().getStepDepartureStop(directions_Json_Text, i);
+                            if (step_Transit.equals("지하철")){
+                                step_Departure_Stop += "역";
+                            }
+                            step_Departure_Time = new JsonParser().getStepDepartureTime(directions_Json_Text, i);
+                            first_Line_Split = steps[i].split("\n");
+                            stepview_Text += steps[i] + "\n";
+                            flag_First = 0;
+                        } else{
+                            if (i == step_Length-1 && step_Travel_Mode.equals("WALKING")){
+                                step_Distance = new JsonParser().getStepDistance(directions_Json_Text, i);
+                                step_Duration = new JsonParser().getStepDuration(directions_Json_Text, i);
+                                stepview_Text += destination + "까지 도보 " + step_Duration + " 소요 (" + step_Distance + ")";
+                            } else{
                                 stepview_Text += steps[i] + "\n";
                             }
                         }
@@ -210,6 +219,7 @@ public class DirectionsPopup  extends Activity {
         remoteViews.setTextViewText(R.id.widget_Particle7, "에 ");
         remoteViews.setTextViewText(R.id.widget_Directions_Stepview_Departure_Time, dptrtm);
         remoteViews.setTextViewText(R.id.widget_Particle8, " 도착");
+        remoteViews.setViewVisibility(R.id.widget_Overview_First,View.VISIBLE);
 
         remoteViews.setTextViewText(R.id.widget_Directions_Stepview_Others, othr);
 

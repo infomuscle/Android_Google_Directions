@@ -19,7 +19,7 @@
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:textColor="#ffffff"
-            android:textSize="24sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/widget_Particle1"
@@ -31,7 +31,7 @@
             android:contentDescription="@string/widget_Directions_Guide"
             android:text="@string/widget_Directions_Guide"
             android:textColor="#ffffff"
-            android:textSize="16sp"
+            android:textSize="12sp"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/widget_Destination"
@@ -42,7 +42,7 @@
             android:background="@android:color/transparent"
             android:contentDescription="\n"
             android:textColor="#ffffff"
-            android:textSize="24sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/widget_Particle2"
@@ -52,7 +52,7 @@
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:textColor="#ffffff"
-            android:textSize="16sp"
+            android:textSize="12sp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -69,7 +69,7 @@
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:textColor="#ffffff"
-            android:textSize="24sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/widget_Total_Distance"
@@ -79,7 +79,7 @@
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:textColor="#ffffff"
-            android:textSize="16sp"
+            android:textSize="12sp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -96,7 +96,7 @@
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:textColor="#ffffff"
-            android:textSize="24sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/widget_Particle3"
@@ -106,7 +106,7 @@
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:textColor="#ffffff"
-            android:textSize="16sp"
+            android:textSize="12sp"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/widget_Total_Arrival_Time"
@@ -116,7 +116,7 @@
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:textColor="#ffffff"
-            android:textSize="24sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/widget_Particle4"
@@ -126,23 +126,14 @@
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:textColor="#ffffff"
-            android:textSize="16sp"
+            android:textSize="12sp"
             android:textStyle="bold" />
     </LinearLayout>
-
-    <ListView
-        android:id="@+id/widget_Stepview"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/white"
-        android:textColor="#ffffff"
-        android:textSize="16sp"
-        android:textStyle="bold"></ListView>
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/widget_Directions_Stepview_First">
+        android:id="@+id/widget_Overview_First"
+        android:visibility="gone">
         <TextView
             android:id="@+id/widget_Directions_Stepview_Transit"
             android:layout_width="wrap_content"
@@ -151,7 +142,7 @@
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:textColor="#ffffff"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/widget_Particle5"
@@ -161,7 +152,7 @@
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:textColor="#ffffff"
-            android:textSize="16sp"
+            android:textSize="12sp"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/widget_Directions_Stepview_LineNumber"
@@ -171,7 +162,7 @@
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:textColor="#ffffff"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/widget_Particle6"
@@ -181,7 +172,7 @@
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:textColor="#ffffff"
-            android:textSize="16sp"
+            android:textSize="12sp"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/widget_Directions_Stepview_Departure_Stop"
@@ -191,7 +182,7 @@
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:textColor="#ffffff"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/widget_Particle7"
@@ -201,7 +192,7 @@
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:textColor="#ffffff"
-            android:textSize="16sp"
+            android:textSize="12sp"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/widget_Directions_Stepview_Departure_Time"
@@ -211,7 +202,7 @@
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:textColor="#ffffff"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/widget_Particle8"
@@ -221,9 +212,20 @@
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:textColor="#ffffff"
-            android:textSize="16sp"
+            android:textSize="12sp"
             android:textStyle="bold" />
     </LinearLayout>
+
+    <ListView
+        android:id="@+id/widget_Stepview"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/white"
+        android:textColor="#ffffff"
+        android:textSize="12sp"
+        android:textStyle="bold"></ListView>
+
+
 
     <TextView
         android:id="@+id/widget_Directions_Stepview_Others"
@@ -233,7 +235,7 @@
         android:layout_centerVertical="true"
         android:background="@android:color/transparent"
         android:textColor="#ffffff"
-        android:textSize="16sp"
+        android:textSize="12sp"
         android:textStyle="bold" />
 
 

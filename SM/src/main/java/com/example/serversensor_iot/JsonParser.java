@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.MessageFormat;
+import java.util.Calendar;
 
 public class JsonParser {
 
@@ -134,6 +135,24 @@ public class JsonParser {
         return step_Transit;
     }
 
+    public String getStepTravelMode(String json_String, int idx){
+        try{
+            // 총 경로의 정보에 접근
+            JSONObject routes = new JSONObject(json_String).getJSONArray("routes").getJSONObject(0);
+            JSONObject legs = routes.getJSONArray("legs").getJSONObject(0);
+
+            // 스텝별 경로의 정보에 접근
+            JSONArray steps = legs.getJSONArray("steps");
+            JSONObject step = steps.getJSONObject(idx);
+            step_Travel_Mode = step.optString("travel_mode");
+
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+        return step_Travel_Mode;
+
+    }
+
     public String getStepLineNumber(String json_String, int idx){
         try{
             // 총 경로의 정보에 접근
@@ -199,6 +218,40 @@ public class JsonParser {
         }
         return step_Departure_Time;
     }
+
+    public String getStepDuration(String json_String, int idx){
+        try{
+            // 총 경로의 정보에 접근
+            JSONObject routes = new JSONObject(json_String).getJSONArray("routes").getJSONObject(0);
+            JSONObject legs = routes.getJSONArray("legs").getJSONObject(0);
+
+            // 스텝별 경로의 정보에 접근
+            JSONArray steps = legs.getJSONArray("steps");
+            JSONObject step = steps.getJSONObject(idx);
+
+            step_Duration = step.getJSONObject("duration").optString("text");
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+        return step_Duration;
+    }
+
+    public String getStepDistance(String json_String, int idx){
+        try{
+            // 총 경로의 정보에 접근
+            JSONObject routes = new JSONObject(json_String).getJSONArray("routes").getJSONObject(0);
+            JSONObject legs = routes.getJSONArray("legs").getJSONObject(0);
+
+            // 스텝별 경로의 정보에 접근
+            JSONArray steps = legs.getJSONArray("steps");
+            JSONObject step = steps.getJSONObject(idx);
+
+            step_Distance = step.getJSONObject("distance").optString("text");
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+        return step_Distance;
+    }
     /****************************  앱 위젯에서 사용  ****************************/
 
 
@@ -211,8 +264,6 @@ public class JsonParser {
             JSONObject legs = routes.getJSONArray("legs").getJSONObject(0);
 
             // 필요 정보 취합
-//            start_Address = legs.optString("start_address");
-//            end_Address = legs.optString("end_address");
             total_Distance = legs.getJSONObject("distance").optString("text");
             total_Duration = legs.getJSONObject("duration").optString("text");
             total_Departure_Time = legs.getJSONObject("departure_time").optString("text");
@@ -267,6 +318,8 @@ public class JsonParser {
 
             // 도보로 이동할 때
             else {
+                message = " {0}, {1} 소요 ({2})";
+                result = MessageFormat.format(message, step_Html_Instruction, step_Duration, step_Distance);
                 return result;
             }
         } catch (JSONException e) {
