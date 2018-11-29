@@ -36,7 +36,6 @@ public class DirectionsPopup  extends Activity {
     private Intent listviewIntent;
     private Context c;
 
-
     // 장소 변수 (입력)
     String origin;                                  // 출발지명
     String destination;                             // 도착지명
@@ -54,27 +53,27 @@ public class DirectionsPopup  extends Activity {
     String total_Distance_Format;                   // 전체 경로 거리 포매팅 변수
     String total_Departure_Time;                    // 전체 경로 출발 시간
     String total_Arrival_Time;                      // 전체 경로 도착 시간
-    String step_Transit;
-    String step_LineNumber;
-    String step_Departure_Stop;
-    String step_Departure_Time;
+
+    String step_Duration;                           // 스텝별 경로 소요시간
+    String step_Distance;                           // 스텝별 경로 거리
+    String step_Travel_Mode;                        // 스텝별 경로 도보 or 대중교통
+    String step_Transit;                            // 스텝별 경로 이동수단
+    String step_LineNumber;                         // 스텝별 경로 버스 및 지하철 노선
+    String step_Departure_Stop;                     // 스텝별 경로 출발 정류장
+    String step_Departure_Time;                     // 스텝별 경로 출발 시간
+    String[] first_Line_Split;
+
     int step_Length;                        // JSON 데이터 중 "steps" 키가 갖는 값의 길이 저장(목적지까지 경로의 스텝 개수)
     String message;                         // MessageFormat 기본값
-    String[] steps;
-    String stepview_Text;
+    String[] steps;                         // 스텝별 경로 정보 String 담아두는 배열
+    String stepview_Text;                   // 최종적으로 출력할 스텝별 경로의 합
     int flag_First = 1;
-    String[] first_Line_Split;
-    String step_Travel_Mode;
-    String step_Distance;
-    String step_Duration;
 
-    Calendar nowTime;
-    Calendar arrTime;
-    SimpleDateFormat sdf;
-    String aa;
-    String bb;
-    String total_Duration_Value;
-    int total_Duration_Value_Int;
+    Calendar now_Calendar;                          // 버튼을 클릭하는 현재 시간
+    Calendar arrival_Calendar;                      // 현재 시간 + 예상 소요시간
+    SimpleDateFormat sdf;                           // 시간 표시 포맷
+    String total_Duration_Value;                    // 소요시간의 초(Second) 값
+    int total_Duration_Value_Int;                   // 소요시간의 초(Second) 값
 
     //기본값 설정
     @Override
@@ -83,8 +82,6 @@ public class DirectionsPopup  extends Activity {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.directions_popup);
-
-
 
         // UI 컴포넌트 변수 설정
         button_Ok = (Button) findViewById(R.id.button_Ok);
@@ -99,7 +96,7 @@ public class DirectionsPopup  extends Activity {
         button_Ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try{
+                try {
                     // 각 변수에 EditText에서 받아온 출발지명, 목적지명 저장
                     origin = edittext_Origin_Popup.getText().toString();
                     destination = edittext_Destination_Popup.getText().toString();
@@ -122,24 +119,22 @@ public class DirectionsPopup  extends Activity {
                     total_Duration = new JsonParser().getTotalDuration(directions_Json_Text);
                     total_Duration_Value = new JsonParser().getTotalDurationValue(directions_Json_Text);
                     total_Duration_Value_Int = Integer.parseInt(total_Duration_Value);
+
                     total_Distance = new JsonParser().getTotalDistance(directions_Json_Text);
-//                    total_Departure_Time = new JsonParser().getTotalDepartureTime(directions_Json_Text);
-//                    total_Arrival_Time = new JsonParser().getTotalArrivalTime(directions_Json_Text);
                     message = " 소요 ({0})";
                     total_Distance_Format = MessageFormat.format(message, total_Distance);
 
-                    nowTime = Calendar.getInstance();
-                    arrTime = Calendar.getInstance();
-                    arrTime.add(Calendar.SECOND, total_Duration_Value_Int);
+                    now_Calendar = Calendar.getInstance();
+                    arrival_Calendar = Calendar.getInstance();
+                    arrival_Calendar.add(Calendar.SECOND, total_Duration_Value_Int);
                     sdf = new SimpleDateFormat("a hh:mm");
-                    total_Departure_Time = sdf.format(nowTime.getTime());
-                    total_Arrival_Time = sdf.format(arrTime.getTime());
+                    total_Departure_Time = sdf.format(now_Calendar.getTime());
+                    total_Arrival_Time = sdf.format(arrival_Calendar.getTime());
 
+                    // 전체 경로 요약 정보를 표시함
                     overviewPrinter(c, awm, origin, destination, total_Duration, total_Distance_Format, total_Departure_Time, total_Arrival_Time);
-//                    overviewPrinter(c, awm, origin, destination, total_Duration, total_Distance_Format, aa, bb);
 
-
-                    // 스텝별 경로를 표시함
+                    // 스텝별 경로를 추출함
                     step_Length = new JsonParser().stepLengthChecker(directions_Json_Text);   // 목적지까지 경로의 스텝 개수를 불러옴
                     steps = new String[step_Length];                               // 각 스텝의 정보를 String 형태로 저장
                     stepview_Text = "";
@@ -147,30 +142,32 @@ public class DirectionsPopup  extends Activity {
                     for (int i = 0; i < step_Length; i++) {
                         steps[i] = new JsonParser().stepPrinter(directions_Json_Text, i);
                         step_Travel_Mode = new JsonParser().getStepTravelMode(directions_Json_Text, i);
-                        if (step_Travel_Mode.equals("WALKING") == false && flag_First == 1){
+                        if (step_Travel_Mode.equals("WALKING") == false && flag_First == 1) {
                             step_Transit = new JsonParser().getStepTransit(directions_Json_Text, i);
                             step_LineNumber = new JsonParser().getStepLineNumber(directions_Json_Text, i);
                             if (step_Transit.equals("버스")) {
                                 step_LineNumber += "번";
                             }
                             step_Departure_Stop = new JsonParser().getStepDepartureStop(directions_Json_Text, i);
-                            if (step_Transit.equals("지하철")){
+                            if (step_Transit.equals("지하철")) {
                                 step_Departure_Stop += "역";
                             }
                             step_Departure_Time = new JsonParser().getStepDepartureTime(directions_Json_Text, i);
                             first_Line_Split = steps[i].split("\n");
                             stepview_Text += steps[i] + "\n";
                             flag_First = 0;
-                        } else{
+                        } else {
                             if (i == step_Length-1 && step_Travel_Mode.equals("WALKING")){
                                 step_Distance = new JsonParser().getStepDistance(directions_Json_Text, i);
                                 step_Duration = new JsonParser().getStepDuration(directions_Json_Text, i);
                                 stepview_Text += destination + "까지 도보 " + step_Duration + " 소요 (" + step_Distance + ")";
-                            } else{
+                            } else {
                                 stepview_Text += steps[i] + "\n";
                             }
                         }
                     }
+
+                    // 스텝별 경로를 표시함
                     stepviewPrinter(c, awm, step_Transit, step_LineNumber, step_Departure_Stop, step_Departure_Time, stepview_Text);
 
                     finish();
@@ -214,12 +211,12 @@ public class DirectionsPopup  extends Activity {
         remoteViews = new RemoteViews(ctxt.getPackageName(), R.layout.directions_widget);
 
         // LinearLayout id:widget_Overview1
-        remoteViews.setTextViewText(R.id.widget_Origin, orgn);
         remoteViews.setTextViewText(R.id.widget_Particle1, "출발 ");
+        remoteViews.setTextViewText(R.id.widget_Origin, orgn);
 
         // LinearLayout id:widget_Overview2
-        remoteViews.setTextViewText(R.id.widget_Destination, dstn);
         remoteViews.setTextViewText(R.id.widget_Particle2, "도착 ");
+        remoteViews.setTextViewText(R.id.widget_Destination, dstn);
         remoteViews.setViewVisibility(R.id.widget_Overview2,View.VISIBLE);
 
         // LinearLayout id:widget_Overview3
@@ -227,15 +224,12 @@ public class DirectionsPopup  extends Activity {
         remoteViews.setTextViewText(R.id.widget_Total_Distance, dstnce);
         remoteViews.setViewVisibility(R.id.widget_Overview3,View.VISIBLE);
 
-
         // LinearLayout id:widget_Overview4
         remoteViews.setTextViewText(R.id.widget_Total_Departure_Time, dptr);
         remoteViews.setTextViewText(R.id.widget_Particle3, " - ");
         remoteViews.setTextViewText(R.id.widget_Total_Arrival_Time, arvl);
         remoteViews.setViewVisibility(R.id.widget_Overview4,View.VISIBLE);
 
-
-        // Stepview
         appWidgetManager.updateAppWidget(thisWidget, remoteViews);
     }
 
@@ -251,13 +245,14 @@ public class DirectionsPopup  extends Activity {
         remoteViews.setTextViewText(R.id.widget_Particle6, " ");
         remoteViews.setViewVisibility(R.id.widget_Overview_First1,View.VISIBLE);
 
-        // LinearLayout id:widget_Overview_First1
+        // LinearLayout id:widget_Overview_First2
         remoteViews.setTextViewText(R.id.widget_Directions_Stepview_Departure_Stop, dptrstp);
         remoteViews.setTextViewText(R.id.widget_Particle7, "에 ");
         remoteViews.setTextViewText(R.id.widget_Directions_Stepview_Departure_Time, dptrtm);
         remoteViews.setTextViewText(R.id.widget_Particle8, " 도착");
         remoteViews.setViewVisibility(R.id.widget_Overview_First2,View.VISIBLE);
 
+        // Stepview
         remoteViews.setTextViewText(R.id.widget_Directions_Stepview_Others, othr);
 
         appWidgetManager.updateAppWidget(thisWidget, remoteViews);
