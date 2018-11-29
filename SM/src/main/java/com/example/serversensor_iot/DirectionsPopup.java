@@ -6,6 +6,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -15,6 +20,8 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class DirectionsPopup  extends Activity {
     // UI 변수
@@ -61,6 +68,14 @@ public class DirectionsPopup  extends Activity {
     String step_Distance;
     String step_Duration;
 
+    Calendar nowTime;
+    Calendar arrTime;
+    SimpleDateFormat sdf;
+    String aa;
+    String bb;
+    String total_Duration_Value;
+    int total_Duration_Value_Int;
+
     //기본값 설정
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +83,8 @@ public class DirectionsPopup  extends Activity {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.directions_popup);
+
+
 
         // UI 컴포넌트 변수 설정
         button_Ok = (Button) findViewById(R.id.button_Ok);
@@ -103,12 +120,24 @@ public class DirectionsPopup  extends Activity {
 
                     // 전체 경로 요약 정보를 추출함
                     total_Duration = new JsonParser().getTotalDuration(directions_Json_Text);
+                    total_Duration_Value = new JsonParser().getTotalDurationValue(directions_Json_Text);
+                    total_Duration_Value_Int = Integer.parseInt(total_Duration_Value);
                     total_Distance = new JsonParser().getTotalDistance(directions_Json_Text);
-                    total_Departure_Time = new JsonParser().getTotalDepartureTime(directions_Json_Text);
-                    total_Arrival_Time = new JsonParser().getTotalArrivalTime(directions_Json_Text);
+//                    total_Departure_Time = new JsonParser().getTotalDepartureTime(directions_Json_Text);
+//                    total_Arrival_Time = new JsonParser().getTotalArrivalTime(directions_Json_Text);
                     message = " 소요 ({0})";
                     total_Distance_Format = MessageFormat.format(message, total_Distance);
+
+                    nowTime = Calendar.getInstance();
+                    arrTime = Calendar.getInstance();
+                    arrTime.add(Calendar.SECOND, total_Duration_Value_Int);
+                    sdf = new SimpleDateFormat("a hh:mm");
+                    total_Departure_Time = sdf.format(nowTime.getTime());
+                    total_Arrival_Time = sdf.format(arrTime.getTime());
+
                     overviewPrinter(c, awm, origin, destination, total_Duration, total_Distance_Format, total_Departure_Time, total_Arrival_Time);
+//                    overviewPrinter(c, awm, origin, destination, total_Duration, total_Distance_Format, aa, bb);
+
 
                     // 스텝별 경로를 표시함
                     step_Length = new JsonParser().stepLengthChecker(directions_Json_Text);   // 목적지까지 경로의 스텝 개수를 불러옴
@@ -178,29 +207,33 @@ public class DirectionsPopup  extends Activity {
     }
 
     // TextView에 전체 경로를 표시하는 메소드 (현재는 스텝별 경로도 TextView로 표시)
-    public void overviewPrinter(Context ctxt, AppWidgetManager appWidgetManager, String ov1, String ov2, String drtn, String dstnce, String dptr, String arvl)
+    public void overviewPrinter(Context ctxt, AppWidgetManager appWidgetManager, String orgn, String dstn, String drtn, String dstnce, String dptr, String arvl)
     {
         this.awm = appWidgetManager;
         thisWidget = new ComponentName(ctxt, DirectionsWidget.class);
         remoteViews = new RemoteViews(ctxt.getPackageName(), R.layout.directions_widget);
 
         // LinearLayout id:widget_Overview1
-        remoteViews.setTextViewText(R.id.widget_Origin, ov1);
-        remoteViews.setTextViewText(R.id.widget_Particle1, "에서 ");
-        remoteViews.setTextViewText(R.id.widget_Destination, ov2);
-        remoteViews.setTextViewText(R.id.widget_Particle2, "까지");
+        remoteViews.setTextViewText(R.id.widget_Origin, orgn);
+        remoteViews.setTextViewText(R.id.widget_Particle1, "출발 ");
 
         // LinearLayout id:widget_Overview2
-        remoteViews.setTextViewText(R.id.widget_Total_Duration, drtn);
-        remoteViews.setTextViewText(R.id.widget_Total_Distance, dstnce);
+        remoteViews.setTextViewText(R.id.widget_Destination, dstn);
+        remoteViews.setTextViewText(R.id.widget_Particle2, "도착 ");
         remoteViews.setViewVisibility(R.id.widget_Overview2,View.VISIBLE);
 
         // LinearLayout id:widget_Overview3
-        remoteViews.setTextViewText(R.id.widget_Total_Departure_Time, dptr);
-        remoteViews.setTextViewText(R.id.widget_Particle3, " 출발 시 ");
-        remoteViews.setTextViewText(R.id.widget_Total_Arrival_Time, arvl);
-        remoteViews.setTextViewText(R.id.widget_Particle4, " 도착 예정");
+        remoteViews.setTextViewText(R.id.widget_Total_Duration, drtn);
+        remoteViews.setTextViewText(R.id.widget_Total_Distance, dstnce);
         remoteViews.setViewVisibility(R.id.widget_Overview3,View.VISIBLE);
+
+
+        // LinearLayout id:widget_Overview4
+        remoteViews.setTextViewText(R.id.widget_Total_Departure_Time, dptr);
+        remoteViews.setTextViewText(R.id.widget_Particle3, " - ");
+        remoteViews.setTextViewText(R.id.widget_Total_Arrival_Time, arvl);
+        remoteViews.setViewVisibility(R.id.widget_Overview4,View.VISIBLE);
+
 
         // Stepview
         appWidgetManager.updateAppWidget(thisWidget, remoteViews);
@@ -211,15 +244,19 @@ public class DirectionsPopup  extends Activity {
         thisWidget = new ComponentName(ctxt, DirectionsWidget.class);
         remoteViews = new RemoteViews(ctxt.getPackageName(), R.layout.directions_widget);
 
+        // LinearLayout id:widget_Overview_First1
         remoteViews.setTextViewText(R.id.widget_Directions_Stepview_Transit, trnst);
         remoteViews.setTextViewText(R.id.widget_Particle5, " ");
         remoteViews.setTextViewText(R.id.widget_Directions_Stepview_LineNumber, lnnm);
         remoteViews.setTextViewText(R.id.widget_Particle6, " ");
+        remoteViews.setViewVisibility(R.id.widget_Overview_First1,View.VISIBLE);
+
+        // LinearLayout id:widget_Overview_First1
         remoteViews.setTextViewText(R.id.widget_Directions_Stepview_Departure_Stop, dptrstp);
         remoteViews.setTextViewText(R.id.widget_Particle7, "에 ");
         remoteViews.setTextViewText(R.id.widget_Directions_Stepview_Departure_Time, dptrtm);
         remoteViews.setTextViewText(R.id.widget_Particle8, " 도착");
-        remoteViews.setViewVisibility(R.id.widget_Overview_First,View.VISIBLE);
+        remoteViews.setViewVisibility(R.id.widget_Overview_First2,View.VISIBLE);
 
         remoteViews.setTextViewText(R.id.widget_Directions_Stepview_Others, othr);
 

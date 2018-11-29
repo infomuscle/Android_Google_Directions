@@ -9,18 +9,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/widget_Overview1"
-        >
-        <TextView
-            android:id="@+id/widget_Origin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:background="@android:color/transparent"
-            android:textColor="#ffffff"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+        android:id="@+id/widget_Overview1">
         <TextView
             android:id="@+id/widget_Particle1"
             android:layout_width="wrap_content"
@@ -34,16 +23,23 @@
             android:textSize="12sp"
             android:textStyle="bold" />
         <TextView
-            android:id="@+id/widget_Destination"
+            android:id="@+id/widget_Origin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:bufferType="spannable"
             android:background="@android:color/transparent"
-            android:contentDescription="\n"
             android:textColor="#ffffff"
             android:textSize="16sp"
             android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/widget_Overview2"
+        android:visibility="gone">
         <TextView
             android:id="@+id/widget_Particle2"
             android:layout_width="wrap_content"
@@ -54,12 +50,22 @@
             android:textColor="#ffffff"
             android:textSize="12sp"
             android:textStyle="bold" />
+        <TextView
+            android:id="@+id/widget_Destination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/widget_Overview2"
+        android:id="@+id/widget_Overview3"
         android:visibility="gone">
         <TextView
             android:id="@+id/widget_Total_Duration"
@@ -86,7 +92,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/widget_Overview3"
+        android:id="@+id/widget_Overview4"
         android:visibility="gone">
         <TextView
             android:id="@+id/widget_Total_Departure_Time"
@@ -132,7 +138,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/widget_Overview_First"
+        android:id="@+id/widget_Overview_First1"
         android:visibility="gone">
         <TextView
             android:id="@+id/widget_Directions_Stepview_Transit"
@@ -174,6 +180,13 @@
             android:textColor="#ffffff"
             android:textSize="12sp"
             android:textStyle="bold" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/widget_Overview_First2"
+        android:visibility="gone">
         <TextView
             android:id="@+id/widget_Directions_Stepview_Departure_Stop"
             android:layout_width="wrap_content"
@@ -215,7 +228,6 @@
             android:textSize="12sp"
             android:textStyle="bold" />
     </LinearLayout>
-
     <ListView
         android:id="@+id/widget_Stepview"
         android:layout_width="match_parent"
@@ -237,6 +249,5 @@
         android:textColor="#ffffff"
         android:textSize="12sp"
         android:textStyle="bold" />
-
 
 </LinearLayout>
