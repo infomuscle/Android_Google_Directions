@@ -78,20 +78,20 @@ public class JsonParser {
     }
 
     public String getTotalDurationValue(String json_String){
-        try{
+        try {
             // JSON 중 필요 데이터에 접근하기 위한 JSON Object 변수 지정
             JSONObject routes = new JSONObject(json_String).getJSONArray("routes").getJSONObject(0);
             JSONObject legs = routes.getJSONArray("legs").getJSONObject(0);
             // 필요 정보 취합
             total_Duration = legs.getJSONObject("duration").optString("value");
-        } catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return total_Duration;
     }
 
     public String getTotalDistance(String json_String){
-        try{
+        try {
             // JSON 중 필요 데이터에 접근하기 위한 JSON Object 변수 지정
             JSONObject routes = new JSONObject(json_String).getJSONArray("routes").getJSONObject(0);
             JSONObject legs = routes.getJSONArray("legs").getJSONObject(0);
