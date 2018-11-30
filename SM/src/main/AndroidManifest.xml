@@ -41,7 +41,8 @@
             android:name=".DirectionsPopup"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Dialog" />
+            android:theme="@android:style/Theme.Dialog"
+            android:configChanges="screenSize|orientation"/>
         <!-- android:theme="@android:style/Theme.Dialog" -->
         <!-- 창을 띄울떄 기존 티비티들이 같이 호출 하지 않게 한다 -->
         <receiver android:name=".WeatherWidget">

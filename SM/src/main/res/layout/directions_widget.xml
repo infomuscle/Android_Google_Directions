@@ -180,7 +180,16 @@
             android:textColor="#ffffff"
             android:textSize="12sp"
             android:textStyle="bold" />
-
+        <TextView
+            android:id="@+id/widget_Directions_Stepview_Departure_Time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:textStyle="bold" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
@@ -199,26 +208,6 @@
             android:textStyle="bold" />
         <TextView
             android:id="@+id/widget_Particle7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:background="@android:color/transparent"
-            android:textColor="#ffffff"
-            android:textSize="12sp"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/widget_Directions_Stepview_Departure_Time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:background="@android:color/transparent"
-            android:textColor="#ffffff"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/widget_Particle8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"

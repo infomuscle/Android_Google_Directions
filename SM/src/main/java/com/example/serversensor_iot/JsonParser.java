@@ -322,10 +322,11 @@ public class JsonParser {
                 step_Arrival_Time = transit_details.getJSONObject("arrival_time").optString("text");
 
                 if (step_Transit.equals("지하철")){
-                    message = " {0} {1} {2}역에 {3} 도착\n   > {4}역에서 {5} 하차";
+                    message = " {0} {1} 승차\n   >> {3} {2}역\n   >> {4}역 하차";
                     result = MessageFormat.format(message, step_Transit, step_Line_Number, step_Departure_Stop, step_Departure_Time, step_Arrival_Stop, step_Arrival_Time);
                 } else{
-                    message = " {0} {1}번 {2}에 {3} 도착\n   > {4}에서 {5} 하차";
+
+                    message = " {0} {1}번 승차\n   >> {3} {2}\n   >> {4} 하차";
                     result = MessageFormat.format(message, step_Transit, step_Line_Number, step_Departure_Stop, step_Departure_Time, step_Arrival_Stop, step_Arrival_Time);
                 }
 
@@ -333,7 +334,8 @@ public class JsonParser {
 
             // 도보로 이동할 때
             else {
-                message = " {0}, {1} 소요 ({2})";
+
+                message = " {0}\n   >> {1} 소요 ({2})";
                 result = MessageFormat.format(message, step_Html_Instruction, step_Duration, step_Distance);
                 return result;
             }

@@ -160,7 +160,7 @@ public class DirectionsPopup  extends Activity {
                             if (i == step_Length-1 && step_Travel_Mode.equals("WALKING")){
                                 step_Distance = new JsonParser().getStepDistance(directions_Json_Text, i);
                                 step_Duration = new JsonParser().getStepDuration(directions_Json_Text, i);
-                                stepview_Text += destination + "까지 도보 " + step_Duration + " 소요 (" + step_Distance + ")";
+                                stepview_Text += destination + "까지 도보\n   >> " + step_Duration + " 소요 (" + step_Distance + ")";
                             } else {
                                 stepview_Text += steps[i] + "\n";
                             }
@@ -243,13 +243,12 @@ public class DirectionsPopup  extends Activity {
         remoteViews.setTextViewText(R.id.widget_Particle5, " ");
         remoteViews.setTextViewText(R.id.widget_Directions_Stepview_LineNumber, lnnm);
         remoteViews.setTextViewText(R.id.widget_Particle6, " ");
+        remoteViews.setTextViewText(R.id.widget_Directions_Stepview_Departure_Time, dptrtm);
         remoteViews.setViewVisibility(R.id.widget_Overview_First1,View.VISIBLE);
 
         // LinearLayout id:widget_Overview_First2
         remoteViews.setTextViewText(R.id.widget_Directions_Stepview_Departure_Stop, dptrstp);
-        remoteViews.setTextViewText(R.id.widget_Particle7, "에 ");
-        remoteViews.setTextViewText(R.id.widget_Directions_Stepview_Departure_Time, dptrtm);
-        remoteViews.setTextViewText(R.id.widget_Particle8, " 도착");
+        remoteViews.setTextViewText(R.id.widget_Particle7, " 승차");
         remoteViews.setViewVisibility(R.id.widget_Overview_First2,View.VISIBLE);
 
         // Stepview
