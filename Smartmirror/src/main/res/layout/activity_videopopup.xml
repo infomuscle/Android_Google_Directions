@@ -1,0 +1,26 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="150dp"
+android:orientation="vertical"
+android:padding="10dp"
+tools:context=".MainActivity"
+tools:ignore="WebViewLayout">
+<WebView
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:id="@+id/webView"
+    android:layout_weight="1" />
+<Button
+    android:id="@+id/button_DOOROPEN"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="열기"
+    android:layout_gravity="bottom|center"/>
+<Button
+    android:id="@+id/button_REPORT"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="신고"
+    android:layout_gravity="bottom|right"/>
+</FrameLayout>

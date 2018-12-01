@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ServerSensor_IOT</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="widget_Directions_Guide">터치해서 목적지를 입력하세요</string>
+</resources>
